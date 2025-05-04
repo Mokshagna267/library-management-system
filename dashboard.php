@@ -1,8 +1,7 @@
 <?php
 session_start();
-
-// Check if the user is logged in and is a student
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'student') {
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    // Redirect to login page if not logged in or not an admin
     header('Location: ../index.html');
     exit();
 }
@@ -18,132 +17,134 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'student') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
-            background: url('../images/admin-bg.jpg') no-repeat center center fixed;
-            background-size: cover;
+            background: #f5f6fa;
             min-height: 100vh;
             margin: 0;
-            padding: 2rem;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            position: relative;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(41, 128, 185, 0.9) 0%, rgba(44, 62, 80, 0.9) 100%);
-            z-index: -1;
-        }
+
         .dashboard-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            padding: 20px;
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            backdrop-filter: blur(10px);
-        }
-        .welcome-section {
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-        }
-        .welcome-section::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, #2980b9, #2c3e50);
-            border-radius: 2px;
-        }
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 1rem;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-        .subtitle {
-            color: #666;
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        .feature-card {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 1.5rem;
-            border-radius: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
+            border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-            background: rgba(255, 255, 255, 1);
-        }
-        .feature-card h3 {
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-        .feature-card p {
-            color: #666;
-            font-size: 0.9rem;
-        }
-        .feature-card a {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.8rem 1.5rem;
-            background: linear-gradient(90deg, #2980b9, #2c3e50);
+
+        .welcome-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #3498db;
+            border-radius: 10px;
             color: white;
-            text-decoration: none;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(41, 128, 185, 0.3);
         }
-        .feature-card a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(41, 128, 185, 0.4);
+
+        .welcome-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .welcome-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .nav-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            color: #2c3e50;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .nav-card i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #3498db;
+        }
+
+        .nav-card h3 {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .nav-card p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                margin: 10px;
+                padding: 15px;
+            }
+            .welcome-header {
+                padding: 15px;
+            }
+            .welcome-header h1 {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="dashboard-container">
-        <div class="welcome-section">
-            <h1><i class="fas fa-user-shield"></i> Welcome, student!</h1>
-            <p class="subtitle">Library Management System Control Panel</p>
+        <div class="welcome-header">
+            <h1>Welcome, <?php echo htmlspecialchars($_SESSION['username'] ?? 'Admin'); ?>!</h1>
+            <p>Library Management System Dashboard</p>
         </div>
-
-        <div class="features-grid">
-            <div class="feature-card">
-                <h3><i class="fas fa-book fa-2x"></i> Search Books</h3>
-                <p>Search books from the library collection</p>
-                <a href="search_books.php"><i class="fas fa-book"></i> Manage Books</a>
-            </div>
-
-            <div class="feature-card">
-                <h3><i class="fas fa-users fa-2x"></i> My Books </h3>
-                <p>Shows the Book Taken </p>
-                <a href="my_books.php"><i class="fas fa-users"></i> Manage Users</a>
-            </div>
-
+        
+        <div class="nav-grid">
+            <a href="add_book.php" class="nav-card">
+                <i class="fas fa-book-medical"></i>
+                <h3>Add Book</h3>
+                <p>Add new books to the library collection</p>
+            </a>
             
-
-            <div class="feature-card">
-                <h3><i class="fas fa-sign-out-alt fa-2x"></i> Logout</h3>
-                <p>Securely exit your account</p>
-                <a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            </div>
+            <a href="add_user.php" class="nav-card">
+                <i class="fas fa-user-plus"></i>
+                <h3>Add User</h3>
+                <p>Register new library members</p>
+            </a>
+            
+            <a href="return_book.php" class="nav-card">
+                <i class="fas fa-book-dead"></i>
+                <h3>Return Book</h3>
+                <p>Manage return Books</p>
+            </a>
+            
+            <a href="remove_user.php" class="nav-card">
+                <i class="fas fa-user-minus"></i>
+                <h3>Remove User</h3>
+                <p>Manage user accounts and access</p>
+            </a>
+            
+            <a href="logout.php" class="nav-card">
+                <i class="fas fa-sign-out-alt"></i>
+                <h3>Logout</h3>
+                <p>Secure logout from the system</p>
+            </a>
         </div>
     </div>
 </body>
