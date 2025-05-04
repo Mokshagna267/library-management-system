@@ -1,13 +1,6 @@
 <?php
-session_start();
+include 'logout_student.php';
 
-// Destroy all session variables
-session_unset();
-
-// Destroy the session
-session_destroy();
-
-// Redirect to the login page
-header('Location: index.html');
-exit();
+// Call the logout function to log out the admin
+studentLogout();
 ?>
