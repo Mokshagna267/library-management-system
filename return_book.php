@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-// Check if the user is logged in and is an admin
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+// Check if the user is logged in and is a librarian
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'librarian') {
     header('Location: ../index.html');
     exit();
 }
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fine = 0;
         if ($current_date > $due_date) {
             $date_diff = (strtotime($current_date) - strtotime($due_date)) / (60 * 60 * 24); // Difference in days
-            $fine = $date_diff * 10; // Assuming fine is $10 per day
+            $fine = $date_diff * 5; // Assuming fine is $5 per day
         }
 
         // Step 3: Update the book's status back to available
@@ -70,69 +70,81 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 0;
             padding: 2rem;
         }
+
         .form-container {
-            max-width: 600px;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             width: 100%;
-            padding: 2.5rem;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            max-width: 500px;
         }
+
         h1 {
             text-align: center;
-            color: #2c3e50;
+            color: #333;
             margin-bottom: 2rem;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+
+        .form-group {
+            margin-bottom: 1.5rem;
         }
+
         label {
-            font-weight: bold;
-            color: #2c3e50;
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
         }
+
         input {
-            padding: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             font-size: 1rem;
         }
+
         button {
-            background: #3498db;
+            width: 100%;
+            padding: 0.75rem;
+            background: #4CAF50;
             color: white;
-            padding: 1rem;
             border: none;
-            border-radius: 8px;
+            border-radius: 5px;
             font-size: 1rem;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: background 0.3s;
         }
+
         button:hover {
-            background: #2980b9;
+            background: #45a049;
         }
-        a {
+
+        .back-link {
             display: block;
             text-align: center;
             margin-top: 1rem;
-            color: #3498db;
+            color: #666;
             text-decoration: none;
         }
-        a:hover {
-            text-decoration: underline;
+
+        .back-link:hover {
+            color: #333;
         }
     </style>
 </head>
 <body>
     <div class="form-container">
-        <h1>Return Book</h1>
+        <h1><i class="fas fa-book"></i> Return Book</h1>
         <form action="return_book.php" method="POST">
-            <label for="issue_id">Issue ID:</label>
-            <input type="number" name="issue_id" id="issue_id" placeholder="Enter Issue ID" required>
+            <div class="form-group">
+                <label for="issue_id"><i class="fas fa-hashtag"></i> Issue ID</label>
+                <input type="number" name="issue_id" id="issue_id" placeholder="Enter the issue ID" required>
+            </div>
             
-            <button type="submit">Return Book</button>
+            <button type="submit"><i class="fas fa-check"></i> Process Return</button>
         </form>
-        <a href="dashboard.php">Back to Dashboard</a>
+        <a href="dashboard.php" class="back-link"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
     </div>
 </body>
 </html>

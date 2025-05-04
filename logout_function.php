@@ -1,6 +1,6 @@
 <?php
-// Function to handle admin logout
-function adminLogout() {
+// Function to handle librarian logout
+function librarianLogout() {
     // Start the session
     session_start();
 
@@ -10,7 +10,7 @@ function adminLogout() {
     // Destroy the session
     session_destroy();
 
-    // Redirect to the login page
+    // Redirect to the librarian login page
     header('Location: ../index.html');
     exit();
 }

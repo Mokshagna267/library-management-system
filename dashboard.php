@@ -1,7 +1,8 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    // Redirect to login page if not logged in or not an admin
+
+// Check if the user is logged in and is a librarian
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'librarian') {
     header('Location: ../index.html');
     exit();
 }
@@ -12,140 +13,145 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | Library Management System</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Librarian Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
         body {
             background: #f5f6fa;
             min-height: 100vh;
             margin: 0;
             padding: 20px;
-            font-family: Arial, sans-serif;
             background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .dashboard-container {
-            max-width: 1200px;
+            max-width: 1000px;
+            width: 100%;
             margin: 0 auto;
-            padding: 20px;
+            padding: 30px;
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        .welcome-header {
+        h1 {
             text-align: center;
+            color: #2c3e50;
             margin-bottom: 30px;
-            padding: 20px;
+            font-size: 28px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
             background: #3498db;
-            border-radius: 10px;
-            color: white;
+            border-radius: 2px;
         }
 
-        .welcome-header h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .welcome-header p {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        .nav-grid {
+        nav ul {
+            list-style: none;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
             padding: 20px;
         }
 
-        .nav-card {
-            background: white;
+        nav ul li a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            text-decoration: none;
+            background: white;
             color: #2c3e50;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .nav-card:hover {
+        nav ul li a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        nav ul li a:hover::before {
+            opacity: 1;
+        }
+
+        nav ul li a:hover {
             transform: translateY(-5px);
+            color: white;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
 
-        .nav-card i {
-            font-size: 40px;
-            margin-bottom: 15px;
-            color: #3498db;
+        nav ul li a i {
+            margin-right: 10px;
+            font-size: 20px;
+            position: relative;
+            z-index: 2;
         }
 
-        .nav-card h3 {
-            margin: 10px 0;
-            font-size: 18px;
-        }
-
-        .nav-card p {
-            color: #7f8c8d;
-            font-size: 14px;
+        nav ul li a span {
+            position: relative;
+            z-index: 2;
         }
 
         @media (max-width: 768px) {
             .dashboard-container {
                 margin: 10px;
-                padding: 15px;
+                padding: 20px;
             }
-            .welcome-header {
-                padding: 15px;
+            h1 {
+                font-size: 24px;
             }
-            .welcome-header h1 {
-                font-size: 20px;
+            nav ul {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <div class="dashboard-container">
-        <div class="welcome-header">
-            <h1>Welcome, <?php echo htmlspecialchars($_SESSION['username'] ?? 'Admin'); ?>!</h1>
-            <p>Library Management System Dashboard</p>
-        </div>
-        
-        <div class="nav-grid">
-            <a href="add_book.php" class="nav-card">
-                <i class="fas fa-book-medical"></i>
-                <h3>Add Book</h3>
-                <p>Add new books to the library collection</p>
-            </a>
-            
-            <a href="add_user.php" class="nav-card">
-                <i class="fas fa-user-plus"></i>
-                <h3>Add User</h3>
-                <p>Register new library members</p>
-            </a>
-            
-            <a href="return_book.php" class="nav-card">
-                <i class="fas fa-book-dead"></i>
-                <h3>Return Book</h3>
-                <p>Manage return Books</p>
-            </a>
-            
-            <a href="remove_user.php" class="nav-card">
-                <i class="fas fa-user-minus"></i>
-                <h3>Remove User</h3>
-                <p>Manage user accounts and access</p>
-            </a>
-            
-            <a href="logout.php" class="nav-card">
-                <i class="fas fa-sign-out-alt"></i>
-                <h3>Logout</h3>
-                <p>Secure logout from the system</p>
-            </a>
-        </div>
+        <h1><i class="fas fa-book-reader"></i> Welcome, Librarian!</h1>
+        <nav>
+            <ul>
+                <li><a href="issue_book.php"><i class="fas fa-book-medical"></i><span>Issue Book</span></a></li>
+                <li><a href="return_book.php"><i class="fas fa-book-return"></i><span>Return Book</span></a></li>
+                <li><a href="mark_damaged.php"><i class="fas fa-exclamation-triangle"></i><span>Mark Damaged</span></a></li>
+                <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+            </ul>
+        </nav>
     </div>
 </body>
 </html>
